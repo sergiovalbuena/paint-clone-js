@@ -50,8 +50,83 @@
       }
     </style>
     <script type="module">
+      //CONSTANTS
+      const MODES = {
+        DRAW: "draw",
+        ERASE: "erase",
+        RECTANGLE: "rectangle",
+        ELLIPSE: "ellipse",
+        PCIKER: "picker",
+      };
+
+      //UTILS
       const $ = (selector) => document.querySelector(selector);
       const $$ = (selector) => document.querySelectorAll(selector);
+
+      //ELEMENTS
+      const $canvas = $("#canvas");
+      const $colorPicker = $("#color-picker");
+
+      const ctx = $canvas.getContext("2d");
+
+      //STATE
+      let isDrawing = false;
+      let startX, startY;
+      let lastX = 0;
+      let lastY = 0;
+      let mode = MODES.DRAW;
+
+      //EVENTS
+      $canvas.addEventListener("mousedown", startDrawing);
+      $canvas.addEventListener("mousemove", draw);
+      $canvas.addEventListener("mouseup", stopDrawing);
+      $canvas.addEventListener("mouseout", stopDrawing);
+
+      $colorPicker.addEventListener("change", changeColor);
+
+      // METHODS
+      function startDrawing(event) {
+        isDrawing = true;
+        //console.log(event.offsetX, event.offsetY);
+        const { offsetX, offsetY } = event;
+
+        //guardar coordenadas
+        [startX, startY] = [offsetX, offsetY];
+        [lastX, lastY] = [offsetX, offsetY];
+      }
+
+      function draw(event) {
+        if (!isDrawing) return;
+
+        const { offsetX, offsetY } = event;
+
+        //comenzar trazado
+        ctx.beginPath();
+
+        //mover trazo a la posición actual
+        ctx.moveTo(lastX, lastY);
+
+        //dibujar línea hasta la posición actual
+        ctx.lineTo(offsetX, offsetY);
+
+        ctx.stroke();
+
+        //actualizar coordenadas
+        [lastX, lastY] = [offsetX, offsetY];
+      }
+
+      function stopDrawing() {
+        isDrawing = false;
+      }
+
+      function changeColor(event) {
+        ctx.strokeStyle = event.target.value;
+      }
+
+      function changeMode() {
+        const { value } = $colorPicker;
+        ctx.strokeStyle = value;
+      }
     </script>
   </head>
   <body>
