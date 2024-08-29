@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paint.js</title>
+
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #222;
+        padding: 16px;
+        max-width: 500px;
+        margin: 0 auto;
+        color: white;
+      }
+      canvas {
+        background-color: white;
+        border: 1px solid white;
+        display: block;
+        margin: 0 auto;
+      }
+      header {
+        background-color: silver;
+        padding: 2px;
+
+        button {
+          border: 0;
+          background-color: transparent;
+
+          &:hover {
+            box-shadow: 1px 1px black, inset -1px 1px gray, inset 1px -1px white;
+          }
+        }
+      }
+      main {
+        padding: 16px;
+      }
+      footer {
+        background-color: silver;
+        padding: 4px;
+      }
+      #container {
+        border: 1px solid #808080;
+      }
+    </style>
+    <script type="module">
+      const $ = (selector) => document.querySelector(selector);
+      const $$ = (selector) => document.querySelectorAll(selector);
+    </script>
+  </head>
+  <body>
+    <h1>Paint.js</h1>
+    <div id="container">
+      <header>
+        <button>File</button>
+        <button>Edit</button>
+        <button>View</button>
+        <button>Options</button>
+        <button>Help</button>
+      </header>
+      <main>
+        <canvas id="canvas" width="300" height="200"></canvas>
+      </main>
+
+      <footer>
+        <input type="color" id="color-picker" value="#000000" />
+      </footer>
+    </div>
+  </body>
+</html>
