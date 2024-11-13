@@ -26,6 +26,7 @@
         margin: 0 auto;
       }
       header {
+        grid-area: header;
         background-color: silver;
         padding: 2px;
 
@@ -40,9 +41,11 @@
       }
       main {
         padding: 16px;
+        grid-area: main;
       }
       footer {
         background-color: silver;
+        grid-area: footer;
         padding: 4px;
       }
       #container {
@@ -56,6 +59,7 @@
 
       aside {
         background-color: silver;
+        grid-area: aside;
         width: 52px;
         padding-top: 2px;
 
@@ -67,6 +71,7 @@
         button {
           width: 24px;
           height: 24px;
+          cursor: pointer;
 
           background: #bdbdbd url("./icons/draw.png") no-repeat center;
           border: 1px solid #eee;
@@ -116,7 +121,12 @@
       //ELEMENTS
       const $canvas = $("#canvas");
       const $colorPicker = $("#color-picker");
-
+      const $clearBtn = $("#clear-btn");
+      const $drawBtn = $("#draw-btn");
+      const $eraseBtn = $("#erase-btn");
+      const $rectangleBtn = $("#rectangle-btn");
+      const $ellipseBtn = $("#ellipse-btn");
+      const $pickerBtn = $("#picker-btn");
       const ctx = $canvas.getContext("2d");
 
       //STATE
@@ -133,6 +143,27 @@
       $canvas.addEventListener("mouseout", stopDrawing);
 
       $colorPicker.addEventListener("change", changeColor);
+      $clearBtn.addEventListener("click", clearCanvas);
+
+      $drawBtn.addEventListener("click", () => {
+        setMode(MODES.DRAW);
+      });
+
+      $eraseBtn.addEventListener("click", () => {
+        setMode(MODES.ERASE);
+      });
+
+      $rectangleBtn.addEventListener("click", () => {
+        setMode(MODES.RECTANGLE);
+      });
+
+      $ellipseBtn.addEventListener("click", () => {
+        setMode(MODES.ELLIPSE);
+      });
+
+      $pickerBtn.addEventListener("click", () => {
+        setMode(MODES.PICKER);
+      });
 
       // METHODS
       function startDrawing(event) {
@@ -152,15 +183,11 @@
 
         //comenzar trazado
         ctx.beginPath();
-
         //mover trazo a la posición actual
         ctx.moveTo(lastX, lastY);
-
         //dibujar línea hasta la posición actual
         ctx.lineTo(offsetX, offsetY);
-
         ctx.stroke();
-
         //actualizar coordenadas
         [lastX, lastY] = [offsetX, offsetY];
       }
@@ -176,6 +203,20 @@
       function changeMode() {
         const { value } = $colorPicker;
         ctx.strokeStyle = value;
+      }
+
+      function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      function setMode(newMode) {
+        mode = newMode;
+        $("button.active")?.classList.remove("active");
+        // $(`button#${newMode}-btn`)?.classList.add("active");
+        if (mode === MODES.DRAW) {
+          $drawBtn.classList.add("active");
+          return;
+        }
       }
     </script>
   </head>
